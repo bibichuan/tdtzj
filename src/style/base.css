@@ -1,0 +1,26 @@
+body{font-family:Arial,Helvetica,SimSun,sans-serif;
+  margin:0px;padding:0px;overflow:hidden;_width:100% !important;/*for ie6*/_height:100% !important;/*for ie6*/ outline:none;font-size: 12px;}
+input,button,select,textarea{font-family:"Microsoft YaHei","宋体","Tahoma", "Arial",  "Verdana", "sans-serif";outline:none;}
+a, span, div, h3, input {font-family: "微软雅黑";}
+label{cursor:pointer;}
+img{border-width:0;}
+a{text-decoration:none;outline:none;}
+ul{margin:0px;padding:0px;zoom:1;}
+li{list-style:none;zoom:1;}
+html{_height:100%;margin:0;overflow:hidden;_padding:55px 0 0 0;/*IE6*/_border:0;}
+
+td,th{text-align: center;vertical-align: middle !important;}
+*, *:after, *:before { -webkit-box-sizing: border-box; -moz-box-sizing: border-box;box-sizing: border-box;}
+
+/*重写element ui样式*/
+.el-table .cell{padding:0;font-size:12px;}
+/*.el-dialog__header{padding:10px 10px 0px 10px;}*/
+.el-dialog__body{padding:10px;}
+.el-dialog__footer{padding:0px 10px 10px 10px;}
+.el-loading-mask{z-index:10000000!important;}
+.el-message{z-index:20011!important;}
+
+thead tr th{text-align: center!important;}
+
+/*在dialog的form中显示日期时间控件的时候，z-index计算有问题*/
+.el-picker-panel{z-index: 10000!important;}
