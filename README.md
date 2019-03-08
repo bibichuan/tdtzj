@@ -1,4 +1,5 @@
-# nbg-history
+# tdtzj
+本实例程序是基于vue-cli3.0+openlayer搭建的调用天地图浙江的基本框架，启动方式和方法都和vue-cli官网一样一样的。
 
 ## Project setup
 ```
