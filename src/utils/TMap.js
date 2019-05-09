@@ -13,15 +13,11 @@ import _debounce from 'lodash/debounce'
 
 let projection = getProjection('EPSG:4326')
 let maxLevel = 20
-export class TMap {
+export class TMap extends Map {
   layerArray=[];//地图图层数组
   events={};//地图事件列表
   constructor (id, center = [120.158, 30.267], level = 16, maptype = 'emap') {
-    this.maptype = maptype;
-    this.level=level;
-    this.center=center;
-
-    let tmap = new Map({
+    super({
       logo: false,
       target: id,
       // interactions: new ol.interaction.defaults({
@@ -51,7 +47,9 @@ export class TMap {
       }),
       moveTolerance: 10
     })
-    this.tmap=tmap;
+    this.maptype = maptype;
+    this.level=level;
+    this.center=center;
     this.setOnlineMapType(maptype, center, level)
   }
   getMapType() {
@@ -59,14 +57,12 @@ export class TMap {
   }
   setOnlineMapType (maptype, center, zoom) {
     //请求天地图图层
-    var view = this.tmap.getView();
+    var view = this.getView();
     var bbox = view.calculateExtent().join(',');
     //fetchJsonp("http://121.43.99.232:8899/api/maplayer/current",{
     fetchJsonp('http://www.zjditu.cn/api/maplayer/current', {
       bbox: bbox, zoom: zoom
-    }).then((response) => {
-      return response.json();
-    }).then((response) => {
+    }, { jsonpCallback:'_cb', timeout: 20000 }).then((response) => {
       if (response.code === 200) {
         this.addOnlineMap(maptype, center, zoom, response.content);
       }
@@ -88,7 +84,7 @@ export class TMap {
     let currentMapType =this.getMapType();
     let targetTypeMap=null;//目标图层
     let currentTypeMap=null;//当前图层
-    let mapColle = this.tmap.getLayers().getArray();
+    let mapColle = this.getLayers().getArray();
     for (let i = 0; i < mapColle.length; i++) {
       if (mapColle[i].get('name')===currentMapType) {
         currentTypeMap=mapColle[i];
@@ -110,7 +106,7 @@ export class TMap {
         isBaseLayers: true,
         layers: []
       })
-      this.tmap.addLayer(targetTypeMap);
+      this.addLayer(targetTypeMap);
     }
     //判断哪些图层是当前图层数组中没有的，没有的加上，如果配置文件中没有，在当前图层数组中存在，则删除图层，不再加载
     //如果执行请求current函数后，图层名称没有变化，则不进行下面的加载图层代码执行
@@ -207,8 +203,8 @@ export class TMap {
 
     this.maptype = maptype;
     if (!this.events['moveend']) {
-      this.events['moveend'] = this.tmap.on('moveend', _debounce((event) => {
-        let view=this.tmap.getView();
+      this.events['moveend'] = this.on('moveend', _debounce((event) => {
+        let view=this.getView();
         this.setOnlineMapType(this.getMapType(), view.getCenter(), view.getZoom());
       }, 500));
     }

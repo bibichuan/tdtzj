@@ -5,11 +5,20 @@
 </template>
 <script>
 import { TMap } from '@/utils/TMap'
+import TileLayer from 'ol/layer/Tile.js';
+import TileWMS from 'ol/source/TileWMS.js';
+
 export default {
   name: 'tmap',
-  props: ['id'],
+  props: ['id', 'center', 'level'],
+  data() {
+    return {
+      map: null
+    }
+  },
   mounted() {
-    new TMap(this.id)
+    this.map=new TMap(this.id, this.center, this.level);
+    this.$store.commit('SET_MAINMAP', this.map);
   }
 }
 </script>
@@ -34,6 +43,7 @@ export default {
       background: #fff;
       color: #000;
       margin: 0;
+      font-size: 1.5em;
       cursor: pointer;
     }
 

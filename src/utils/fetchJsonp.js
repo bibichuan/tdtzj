@@ -46,8 +46,7 @@ function checkXhr(xhr) {
     }
   }
 }
-function fetchJsonp(_url, data={}, options = { jsonpCallback:'_cb',
-  timeout: 20000 }) {
+function fetchJsonp(_url, data={}, options = {}) {
   // to avoid param reassign
   let url = _url;
 
@@ -113,14 +112,9 @@ function fetchJsonp(_url, data={}, options = { jsonpCallback:'_cb',
 
     //脚本加载成功后执行回调
     jsonpScript.onload=function () {
-      resolve({
-        ok: true,
-        // keep consistent with fetch API
-        json: () => {
-          xhrArray.length=0;//清空数组
-          return Promise.resolve(responseData)
-        }
-      });
+      resolve((function() {
+        return Promise.resolve(responseData)
+      })());
 
       if (timeoutId) clearTimeout(timeoutId);
 
